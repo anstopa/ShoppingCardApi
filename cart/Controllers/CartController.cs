@@ -29,11 +29,21 @@ namespace cart.Controllers
             return cartProducts;
            
         }
-        [HttpPost("addProductToCart")]
-        public void AddProduct([FromBody] Cart  cart)
+        [HttpPut("{id}")]
+        public void AddProduct(int id, [FromBody] Cart  cart)
         {
-            context.cartProducts.Add(cart);
-            context.SaveChanges();
+            var data = context.cartProducts.Find(id);
+            if (data == null)
+            {
+                context.cartProducts.Add(cart);
+                context.SaveChanges();
+            }
+            else
+            {
+                data.Quantity = cart.Quantity;
+                context.cartProducts.Update(data);
+                context.SaveChanges();
+            }
             
         }
         [HttpDelete("{id}")]
