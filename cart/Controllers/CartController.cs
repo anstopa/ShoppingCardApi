@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using cart.Data;
 using cart.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,35 +24,42 @@ namespace cart.Controllers
 
         // GET: /<controller>/
         [HttpGet("getCartProducts")]
-        public List<Cart> Get()
+        public async Task<List<Cart>> Get()
         {
-            var cartProducts = context.cartProducts.ToList();
+            var cartProducts = await context.CartProducts.ToListAsync();
             return cartProducts;
            
         }
         [HttpPut("{id}")]
-        public void AddProduct(int id, [FromBody] Cart  cart)
+        public async  Task<Cart>AddProduct(int id, [FromBody] Cart  cart)
         {
-            var data = context.cartProducts.Find(id);
+            var data = await context.CartProducts.FindAsync(id);
             if (data == null)
             {
-                context.cartProducts.Add(cart);
-                context.SaveChanges();
+              await context.CartProducts.AddAsync(cart);
+               await context.SaveChangesAsync();
+                return data;
             }
             else
             {
                 data.Quantity = cart.Quantity;
-                context.cartProducts.Update(data);
-                context.SaveChanges();
+               context.CartProducts.Update(data);
+               await context.SaveChangesAsync();
+                return data;
             }
             
         }
+        
+
+
+
         [HttpDelete("{id}")]
-        public void DeleteProduct(int id)
+        public async Task<Cart>DeleteProduct(int id)
         {
-            var data = context.cartProducts.Find(id);
-            context.cartProducts.Remove(data);
-            context.SaveChanges();
+            var data = await context.CartProducts.FindAsync(id);
+            context.CartProducts.Remove(data);
+           await context.SaveChangesAsync();
+            return data;
 
         }
     }

@@ -2,15 +2,15 @@
 
 namespace cart.Migrations
 {
-    public partial class Update : Migration
+    public partial class update : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "cartProducts",
+                name: "CartProducts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ProductId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     Price = table.Column<float>(nullable: false),
@@ -18,33 +18,34 @@ namespace cart.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_cartProducts", x => x.Id);
+                    table.PrimaryKey("PK_CartProducts", x => x.ProductId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ProductId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     Price = table.Column<float>(nullable: false),
                     Quantity = table.Column<int>(nullable: false, defaultValue: 1)
-                        .Annotation("Sqlite:Autoincrement", true)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RelatedProducts = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.ProductId);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "cartProducts");
+                name: "CartProducts");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Product");
         }
     }
 }

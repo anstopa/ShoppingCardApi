@@ -8,8 +8,8 @@ using cart.Data;
 namespace cart.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200416212854_Update")]
-    partial class Update
+    [Migration("20200504153658_update")]
+    partial class update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,7 @@ namespace cart.Migrations
 
             modelBuilder.Entity("cart.Models.Cart", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -32,14 +32,14 @@ namespace cart.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
 
-                    b.ToTable("cartProducts");
+                    b.ToTable("CartProducts");
                 });
 
             modelBuilder.Entity("cart.Models.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -55,9 +55,12 @@ namespace cart.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(1);
 
-                    b.HasKey("Id");
+                    b.Property<string>("RelatedProducts")
+                        .HasColumnType("TEXT");
 
-                    b.ToTable("Products");
+                    b.HasKey("ProductId");
+
+                    b.ToTable("Product");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,9 @@ namespace cart.Data
 		public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
 		public DbSet<Product> Products { get; set; }
-		public DbSet<Cart> cartProducts { get; set; }
+		public DbSet<Cart> CartProducts { get; set; }
+		
+
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
