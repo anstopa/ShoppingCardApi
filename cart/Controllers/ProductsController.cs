@@ -15,26 +15,26 @@ namespace cart.Controllers
 	[Route("api/[controller]")]
 	public class ProductsController : ControllerBase
 	{
-		private readonly DataContext context;
+		private readonly ICartRepository repository;
 
-		public ProductsController(DataContext context)
+		public ProductsController(ICartRepository repository)
 		{
-			this.context = context;
+			this.repository = repository;
 		}
 		// GET: /<controller>/
 		[HttpGet ("getProduct")]
-		public  List<Product> Get()
+		public async Task<List<Product>> GetProduct()
 		{
-			var products =  context.Products.ToList();
+			var products =  await repository.GetProduct();
 			return products;
 		}
 
-		[HttpPost("addProduct")]
-		public void AddProduct([FromBody] Product product)
-		{
-			 context.Products.Add(product);
-			context.SaveChanges();
-		}
+		//[HttpPost("addProduct")]
+		//public void AddProduct([FromBody] Product product)
+		//{
+		//	 context.Products.Add(product);
+		//	context.SaveChanges();
+		//}
 	//	[HttpGet("getRelatedProducts{id}")]
 	//	public async Task<IEnumerable<int>> GetRelatedProducts(int id)
 	//	{

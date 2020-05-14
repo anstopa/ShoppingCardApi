@@ -15,38 +15,41 @@ namespace cart.Controllers
     [Route("api/[controller]")]
     public class CartController : Controller
     {
-        private readonly DataContext context;
+        private readonly ICartRepository repository;
 
-        public CartController(DataContext context )
+        public CartController(ICartRepository repository)
         {
-            this.context = context;
+            this.repository = repository;
         }
 
         // GET: /<controller>/
         [HttpGet("getCartProducts")]
-        public async Task<List<Cart>> Get()
+        public async Task<List<Cart>> GetCartProduct()
         {
-            var cartProducts = await context.CartProducts.ToListAsync();
+            var cartProducts = await repository.GetCartProduct();
             return cartProducts;
            
         }
         [HttpPut("{id}")]
         public async  Task<Cart>AddProduct(int id, [FromBody] Cart  cart)
         {
-            var data = await context.CartProducts.FindAsync(id);
-            if (data == null)
-            {
-              await context.CartProducts.AddAsync(cart);
-               await context.SaveChangesAsync();
-                return data;
-            }
-            else
-            {
-                data.Quantity = cart.Quantity;
-               context.CartProducts.Update(data);
-               await context.SaveChangesAsync();
-                return data;
-            }
+            var data = await repository.AddProduct(id, cart);
+            return data;
+
+            //var data = await context.CartProducts.FindAsync(id);
+            //if (data == null)
+            //{
+            //  await context.CartProducts.AddAsync(cart);
+            //   await context.SaveChangesAsync();
+            //    return data;
+            //}
+            //else
+            //{
+            //    data.Quantity = cart.Quantity;
+            //   context.CartProducts.Update(data);
+            //   await context.SaveChangesAsync();
+            //    return data;
+            //}
             
         }
         
@@ -56,10 +59,12 @@ namespace cart.Controllers
         [HttpDelete("{id}")]
         public async Task<Cart>DeleteProduct(int id)
         {
-            var data = await context.CartProducts.FindAsync(id);
-            context.CartProducts.Remove(data);
-           await context.SaveChangesAsync();
+            var data = await repository.DeleteProduct(id);
             return data;
+           // var data = await context.CartProducts.FindAsync(id);
+           // context.CartProducts.Remove(data);
+           //await context.SaveChangesAsync();
+           // return data;
 
         }
     }
